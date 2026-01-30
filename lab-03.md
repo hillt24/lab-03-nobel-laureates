@@ -97,9 +97,32 @@ nrow(nobel_living)
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 1 here. Add code
-chunks as needed. Don’t forget to label your code chunk. Do not use
-spaces in code chunk labels.
+Most laureates who were foreign-born were not actually in the US. This
+is only true for economists.
+
+``` r
+nobel_living <- nobel_living %>% 
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other"
+  ))
+nobel_living_science <- nobel_living %>% 
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+
+library(dplyr)
+library(ggplot2)
+
+ggplot(nobel_living_science, aes(x = born_country == "USA")) +
+  geom_bar() +
+  facet_wrap(~ category) + 
+  coord_flip() +
+  labs (
+    x = "In the US when the prize was won",
+    y = "Number of laureates",
+    title = "Nobel Laureates in Science: US vs Other Countries"
+  )
+```
+
+![](lab-03_files/figure-gfm/US-winners-1.png)<!-- -->
 
 ### Exercise 4
 
