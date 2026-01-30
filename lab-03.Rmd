@@ -9,6 +9,7 @@ output: github_document
 
 ```{r load-packages, message=FALSE}
 library(tidyverse) 
+library(skimr)
 ```
 
 ```{r load-data, message=FALSE}
@@ -18,18 +19,25 @@ nobel <- read_csv("data/nobel.csv")
 ## Exercises
 
 ### Exercise 1
+There are 935 observations, which as represented by rows. There are 26 variables.
+```{r numberofobs-variables}
+skim(nobel)
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```
 
 ### Exercise 2
+```{r new-data-frame}
+nobel_living <- nobel %>% 
+  filter(
+  is.na(died_date),
+  !is.na(country),
+  gender != "org"
+  )
+nrow(nobel_living)
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+
+
+```
 
 ### Exercise 3
 
