@@ -97,8 +97,10 @@ nrow(nobel_living)
 
 ### Exercise 3
 
-Most laureates who were foreign-born were not actually in the US. This
-is only true for economists.
+Most nobel prizes were won by individuals in the USA. The Buzzfeed
+headline is partially supported by this data. This graph does not show
+us where these individuals were born, but it does prove that most living
+Nobel laureates in the sciences are based in the US.
 
 ``` r
 nobel_living <- nobel_living %>% 
@@ -111,7 +113,7 @@ nobel_living_science <- nobel_living %>%
 library(dplyr)
 library(ggplot2)
 
-ggplot(nobel_living_science, aes(x = born_country == "USA")) +
+ggplot(nobel_living_science, aes(x = country_us)) +
   geom_bar() +
   facet_wrap(~ category) + 
   coord_flip() +
@@ -119,19 +121,81 @@ ggplot(nobel_living_science, aes(x = born_country == "USA")) +
     x = "In the US when the prize was won",
     y = "Number of laureates",
     title = "Nobel Laureates in Science: US vs Other Countries"
-  )
+  ) +
+  scale_x_discrete(labels = c("FALSE" = "Other", "TRUE" = "US"))
 ```
 
 ![](lab-03_files/figure-gfm/US-winners-1.png)<!-- -->
 
 ### Exercise 4
 
+105 winners were born in the US.
+
+``` r
+born_country_us <- nobel_living %>% 
+  mutate(
+    born_country_us = if_else(born_country == "USA", "USA", "Other")
+  )
+```
+
 …
 
 ### Exercise 5
 
-…
+This diagram doesn’t appear to support Buzzfeed’s claim. Most people who
+won a nobel peace prize in the US were born in the USA.
+
+``` r
+nobel_living <- nobel_living %>% 
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other"
+  ))
+nobel_living_science <- nobel_living %>% 
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+
+library(dplyr)
+library(ggplot2)
+
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) +
+  geom_bar() +
+  facet_grid(~category) + 
+  coord_flip() +
+  labs(
+    x = "Country they were in when they won",
+    y = "Number of laureates"
+    
+  )
+```
+
+    ## Don't know how to automatically pick scale for object of type
+    ## <tbl_df/tbl/data.frame>. Defaulting to continuous.
+
+![](lab-03_files/figure-gfm/add-variable-exercise5-1.png)<!-- -->
 
 ### Exercise 6
+
+Germany is the most common country.
+
+``` r
+nobel_living %>% 
+  filter(country_us == "USA", born_country != "USA") %>% 
+  count(born_country) %>%
+  arrange(desc(n))
+```
+
+    ## # A tibble: 21 × 2
+    ##    born_country       n
+    ##    <chr>          <int>
+    ##  1 Germany            7
+    ##  2 United Kingdom     7
+    ##  3 China              5
+    ##  4 Canada             4
+    ##  5 Japan              3
+    ##  6 Australia          2
+    ##  7 Israel             2
+    ##  8 Norway             2
+    ##  9 Austria            1
+    ## 10 Finland            1
+    ## # ℹ 11 more rows
 
 …
